@@ -61,7 +61,26 @@ def reoccurend_measure(file: pathlib.Path, delay_secs: int = 0, repeat: int = -1
 
 
 if __name__ == "__main__":
+    import os
+
     logger.setLevel(logging.INFO)
 
+    base_path = os.environ.get('SPEEDTEST_OUTPUT_PATH')
+    delay = os.environ.get('SPEEDTEST_DELAY')
+    repeat = os.environ.get('SPEEDTEST_REPEAT')
+
+    if not base_path:
+        base_path = '.'
+
+    if delay:
+        delay = int(delay)
+    else:
+        delay = 60
+
+    if repeat:
+        repeat = int(repeat)
+    else:
+        repeat = -1
+
     file = pathlib.Path('result.json')
-    reoccurend_measure(file, delay_secs=60, repeat=2)
+    reoccurend_measure(file, delay_secs=delay, repeat=repeat)
