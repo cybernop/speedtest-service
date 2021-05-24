@@ -11,8 +11,12 @@ logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('speedtest')
 
 
-def measure_speed():
+def measure_speed(single: bool = False):
     cmd = ['speedtest-cli', '--json']
+
+    if single:
+        cmd.append('--single')
+
     process_result = subprocess.run(cmd, capture_output=True)
     output = json.loads(process_result.stdout)
     timestamp = datetime.strptime(output['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -26,18 +30,24 @@ def measure_speed():
 
 
 def protocol_measure(file: pathlib.Path):
-    result = measure_speed()
+    multi_result = measure_speed()
+    single_result = measure_speed(single=True)
 
     if (file.exists()):
         file_contents = json.loads(file.read_text())
     else:
-        file_contents = []
+        file_contents = {'multi': [], 'single': []}
 
-    file_contents.append(result)
+    file_contents['multi'].append(multi_result)
+    file_contents['single'].append(single_result)
+
     file.write_text(json.dumps(file_contents, default=str))
 
-    logger.info('Download: %.2f Mbps, Upload: %.2f Mbps, Ping: %.1f',
-                result['download'], result['upload'], result['ping'])
+    logger.info('Multi\tDownload: %.2f Mbps,\tUpload: %.2f Mbps,\tPing: %.1f',
+                multi_result['download'], multi_result['upload'], multi_result['ping'])
+
+    logger.info('Single\tDownload: %.2f Mbps,\tUpload: %.2f Mbps,\tPing: %.1f',
+                single_result['download'], single_result['upload'], single_result['ping'])
 
 
 def reoccurend_measure(file: pathlib.Path, delay_secs: int = 0, repeat: int = -1):
