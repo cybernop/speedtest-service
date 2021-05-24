@@ -2,7 +2,8 @@ import json
 import logging
 import pathlib
 import subprocess
-from datetime import datetime, time
+import time
+from datetime import datetime
 
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -39,8 +40,28 @@ def protocol_measure(file: pathlib.Path):
                 result['download'], result['upload'], result['ping'])
 
 
+def reoccurend_measure(file: pathlib.Path, delay_secs: int = 0, repeat: int = -1):
+    while True:
+        try:
+            start = datetime.now()
+            protocol_measure(file)
+
+            repeat -= 1
+            if repeat == 0:
+                break
+
+            end = datetime.now()
+            wait_time = delay_secs - (end-start).total_seconds()
+
+            if (wait_time > 0):
+                time.sleep(wait_time)
+        except KeyboardInterrupt:
+            logger.info('stopped')
+            exit()
+
+
 if __name__ == "__main__":
     logger.setLevel(logging.INFO)
 
     file = pathlib.Path('result.json')
-    protocol_measure(file)
+    reoccurend_measure(file, delay_secs=60, repeat=2)
