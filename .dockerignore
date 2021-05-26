@@ -1,0 +1,15 @@
+.vscode
+.history
+
+.venv
+.noseids
+
+.git
+.gitignore
+
+results/
+ansible/
+
+Dockerfile
+.dockerignore
+docker-compose.yml
