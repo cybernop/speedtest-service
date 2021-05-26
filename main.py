@@ -80,7 +80,7 @@ if __name__ == "__main__":
     repeat = os.environ.get('SPEEDTEST_REPEAT')
 
     if not base_path:
-        base_path = '.'
+        base_path = 'results'
 
     if delay:
         delay = int(delay)
@@ -92,5 +92,6 @@ if __name__ == "__main__":
     else:
         repeat = -1
 
-    file = pathlib.Path('result.json')
+    file = pathlib.Path(base_path) / 'result.json'
+
     reoccurend_measure(file, delay_secs=delay, repeat=repeat)
