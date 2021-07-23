@@ -1,12 +1,8 @@
 version: "3.8"
 
 services:
-    speedtest_service:
-        image: anex:32768/speedtest
+    speedtest:
+        image: speedtest
         build: .
-        environment: 
-            SPEEDTEST_OUTPUT_PATH: /results
-            SPEEDTEST_DELAY: 900
-            SPEEDTEST_REPEAT: -1
-        volumes:
-            - ${PWD}/results:/results
+        ports:
+            - 8001:8000
