@@ -10,7 +10,8 @@ g_up = Gauge('speedtest_up', 'Upload Speed')
 
 
 def measure_speed():
-    cmd = ['speedtest-cli', '--json', '--single']
+    # cmd = ['speedtest-cli', '--json', '--single']
+    cmd = ['speedtest-cli', '--json']
 
     process_result = subprocess.run(cmd, capture_output=True)
     output = json.loads(process_result.stdout)
