@@ -29,18 +29,12 @@ def measure_speed():
 def repeat(func, delay_secs: int = 0):
     while True:
         try:
-            start = datetime.now()
             func()
-
-            end = datetime.now()
-            wait_time = delay_secs - (end-start).total_seconds()
-
-            if (wait_time > 0):
-                time.sleep(wait_time)
+            time.sleep(delay_secs)
         except KeyboardInterrupt:
             exit()
 
 
 if __name__ == "__main__":
     start_http_server(8000, addr="0.0.0.0")
-    repeat(measure_speed, delay_secs=60)
+    repeat(measure_speed, delay_secs=300)
