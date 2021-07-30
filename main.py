@@ -7,7 +7,7 @@ from prometheus_client import Gauge, start_http_server
 from speedtest import Speedtest
 
 FORMAT = '%(asctime)-15s %(message)s'
-logging.basicConfig(format=FORMAT)
+logging.basicConfig(format=FORMAT, level=logging.INFO)
 
 logger = logging.getLogger('speedtest')
 
@@ -33,12 +33,14 @@ def measure_speed():
     upload = results.get('upload', 0) / (1000**2)
 
     if download != 0:
+        logger.info(f'measured download speed: {download:.1f} Mbps')
         g_down.set_to_current_time()
         g_down.set(download)
     else:
         logger.warning('measured download speed is zero!')
 
     if upload != 0:
+        logger.info(f'measured upload speed: {upload:.1f} Mbps')
         g_up.set_to_current_time()
         g_up.set(upload)
     else:
