@@ -1,6 +1,4 @@
-import json
 import logging
-import subprocess
 import time
 
 from prometheus_client import Gauge, start_http_server
