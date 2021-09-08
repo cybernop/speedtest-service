@@ -22,3 +22,8 @@ pipelines:
             # Enforce style consistency across Python projects https://flake8.pycqa.org/en/latest/manpage.html
             - pip install flake8
             - flake8 . --extend-exclude=dist,build --show-source --statistics
+      - step:
+          script:
+            - docker build -t speedtest .
+          services:
+            - docker
